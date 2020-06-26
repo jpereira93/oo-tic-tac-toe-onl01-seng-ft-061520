@@ -32,5 +32,5 @@ def valid_move?(index_i)
 index_i.between?(0,8) && !position_taken?(index_i)
 end
 def turn_count
-end 
+end
 end
