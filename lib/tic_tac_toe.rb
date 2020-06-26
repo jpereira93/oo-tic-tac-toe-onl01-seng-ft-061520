@@ -32,5 +32,70 @@ def valid_move?(index_i)
 index_i.between?(0,8) && !position_taken?(index_i)
 end
 def turn_count
+    counter = 0
+    @board.each do |i|
+      if i == "X" || i == "O"
+        counter += 1
+      end
+    end
+    counter
+  end
+  def current_player
+    turn_count % 2 == 0 ? "X" : "O"
+  end
+  def turn
+    puts "Please choose a number 1-9:"
+    user_input = gets.chomp
+    index = input_to_index(user_input)
+    if valid_move?(index)
+      player_token = current_player
+      move(index, player_token)
+      display_board
+    else
+      turn
+    end
+    def won?
+    board_empty = @board.none? { |i| i == "X" || i = "O"}
+    if board_empty
+      false
+    else
+      WIN_COMBINATIONS.each do |combo|
+        if @board[combo[0]] == "X" && @board[combo[1]] == "X" && @board[combo[2]] == "X" || @board[combo[0]] == "O" && @board[combo[1]] == "O" && @board[combo[2]] == "O"
+          return combo
+        end
+      end
+      return false
+  end
+end
+def full?
+    @board.all? { |i| i =="X" || i == "O"}
+  end
+  def draw?
+    !won? && full? ? true : false
+  end
+  def over?
+    won? || draw? || full? ? true : false
+  end
+  def winner
+    WIN_COMBINATIONS.detect do |combo|
+          if @board[combo[0]] == "X" && @board[combo[1]] == "X" && @board[combo[2]] == "X"
+            return "X"
+          elsif @board[combo[0]] == "O" && @board[combo[1]] == "O" && @board[combo[2]] == "O"
+            return "O"
+          else
+            nil
+          end
+    end
+  end
+  def play
+    until over?
+      turn
+    end
+    if won?
+      puts "Congratulations #{winner}!"
+    elsif draw?
+      puts "Cat's Game!"
+    end
+  end
 end
 end
